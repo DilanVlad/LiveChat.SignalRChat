@@ -1,0 +1,40 @@
+﻿@page
+
+
+
+<div class="container">
+    <div class="row p-1">
+        <div class="col-1">User</div>
+        <div class="col-12"><input type="text" id="userInput" placeholder="Tu-Nombre" required/></div>
+    </div>
+    <div class="row p-1">
+        <div class="col-1">Message</div>
+        <div class="col-12"><input type="text" class="w-100" id="messageInput" placeholder="Tu-Mensaje" required/></div>
+    </div>
+
+    <div class="row p-1">
+        <div class="col-6 text-end">
+            <input type="button" id="sendButton" value="Enviar Mensaje" />
+        </div>
+    </div>
+
+
+    <div class="row p-1">
+        <div class="col-6">
+            <hr />
+        </div>
+    </div>
+    <div class="scroll-vertival"> 
+                <ul id="messagesList" ></ul>
+    </div>
+</div>
+
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+
+<style>
+    li{
+        text-decoration: none
+    }
+</style>
