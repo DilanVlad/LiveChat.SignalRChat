@@ -1,14 +1,13 @@
 ﻿"use strict";
-
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 var currentUser = "";
+
 //Disable the send button until connection is established.
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
     // Crear la estructura del chat con DaisyUI
     var chatDiv = document.createElement("div");
-
     // Verificar si el mensaje es del usuario actual
     if (user === currentUser) {
         // Mis mensajes (chat-end - derecha)
@@ -17,38 +16,34 @@ connection.on("ReceiveMessage", function (user, message) {
         // Mensajes de otros (chat-start - izquierda)
         chatDiv.className = "chat chat-start";
     }
-
     // Crear avatar
     var avatarDiv = document.createElement("div");
     avatarDiv.className = "chat-image avatar";
-
     var avatarInner = document.createElement("div");
     avatarInner.className = "w-10 rounded-full";
-
     var avatarImg = document.createElement("img");
     avatarImg.alt = "Avatar";
     avatarImg.src = "https://img.daisyui.com/images/profile/demo/yellingcat@192.webp";
-
     avatarInner.appendChild(avatarImg);
     avatarDiv.appendChild(avatarInner);
-
     // Crear header con nombre de usuario
     var headerDiv = document.createElement("div");
     headerDiv.className = "chat-header";
     headerDiv.textContent = user;
-
     // Crear burbuja con mensaje
     var bubbleDiv = document.createElement("div");
     bubbleDiv.className = "chat-bubble";
     bubbleDiv.textContent = message;
-
     // Ensamblar todo
     chatDiv.appendChild(avatarDiv);
     chatDiv.appendChild(headerDiv);
     chatDiv.appendChild(bubbleDiv);
-
     // Agregar al contenedor de mensajes
     document.getElementById("messagesList").appendChild(chatDiv);
+
+    // Auto-scroll hacia abajo
+    var messagesList = document.getElementById("messagesList").parentElement;
+    messagesList.scrollTop = messagesList.scrollHeight;
 });
 
 connection.start().then(function () {
@@ -57,9 +52,16 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("userInput").value;
-    var message = document.getElementById("messageInput").value;
+// Función para validar y enviar mensaje
+function sendMessage() {
+    var user = document.getElementById("userInput").value.trim();
+    var message = document.getElementById("messageInput").value.trim();
+
+    // Validación: no enviar si usuario o mensaje están vacíos
+    if (user === "" || message === "") {
+        alert("Por favor ingresa tu nombre y un mensaje");
+        return;
+    }
 
     if (currentUser === "") {
         currentUser = user;
@@ -68,5 +70,20 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     connection.invoke("SendMessage", user, message).catch(function (err) {
         return console.error(err.toString());
     });
+
+    // Limpiar el campo de mensaje después de enviar
+    document.getElementById("messageInput").value = "";
+}
+
+document.getElementById("sendButton").addEventListener("click", function (event) {
     event.preventDefault();
+    sendMessage();
+});
+
+// Permitir enviar con Enter
+document.getElementById("messageInput").addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+    }
 });

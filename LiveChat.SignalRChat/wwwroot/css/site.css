@@ -21,27 +21,3 @@ body {
   margin-bottom: 60px;
 }
 
-.lista{
-    background-color: aquamarine;
-}
-.usuario{
-    background-color: palevioletred;
-}
-.scroll-vertival {
-    width: 100%;
-    height: 600px;
-    background-color: antiquewhite;
-    overflow-y: scroll;
-    overflow-x: hidden
-}
-
-
-@media (max-width: 600px) {
-    .scroll-vertival {
-        width: 100%;
-        height: 300px;
-        background-color: antiquewhite;
-        overflow-y: scroll;
-        overflow-x: hidden
-    }
-}
